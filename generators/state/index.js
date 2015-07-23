@@ -6,7 +6,8 @@ console.log(utils)
 
 /*
 
-yo gathernow:state 'stateName' 'tabName' 'parentState' 'url'
+yo gathernow:state 'localTwo' --tab='localOne' --parentState='localOne' --url='/:id'
+yo gathernow:state 'stateName' --tab='tabName' --parentState='parentState' --url='url'
 
 */
 module.exports = yeoman.generators.Base.extend({
@@ -16,30 +17,37 @@ module.exports = yeoman.generators.Base.extend({
       type: String,
       desc: 'The subgenerator stateName'
     });
-    this.argument('tabName', {
+    this.option('tabName', {
       defaults: '',
+      alias: 'tab',
       type: String,
       desc: 'The the tab the state is inserted in - will be name of ionic-tab-view name'
     });
-    this.argument('parentState', {
+    this.tabName = this.options.tabName
+    this.option('parentState', {
       defaults: '',
+      alias: 'parent',
       type: String,
       desc: 'The the parent state can be dotted, dont include tab'
     });
-    this.argument('url', {
+    this.parentState = this.options.parentState
+
+    this.option('url', {
       defaults: '',
       type: String,
       desc: 'url'
     });
+    this.url = this.options.url
+
     this.parentStates = ['tab'];
     if (this.parentState) {
-      this.parentStates.push(parentState)
+      this.parentStates.push(this.parentState)
     }
     if (!this.tabName) {
       this.tabName = this.stateName
     }
     if (!this.url) {
-      this.url = '/' + stateName;
+      this.url = '/' + this.stateName;
     }
 
     this.fileName = this.stateName + 'State.coffee';

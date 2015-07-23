@@ -38,6 +38,12 @@ Ctrl = ($log, $scope, cfg) ->
   vm.name = "<%= ctrlName %>"
   vm.headerTitle = "<%= stateName %>"
 
+
+  # activation fn
+  vm.activate = ->
+    return
+
+  vm.activate() # run activate fn
   return
 
 ###State Config###
