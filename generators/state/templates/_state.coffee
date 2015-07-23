@@ -20,7 +20,7 @@ fullStateName = "<%= fullStateName %>"
 
 ###Template###
 tpl = """
-<ion-view view-title="{{ <%= ctrlInstsName %>.headerTitle }}">
+<ion-view cache-view="false" view-title="{{ <%= ctrlInstsName %>.headerTitle }}">
   <ion-content class="padding">
     <h1>{{ <%= ctrlInstsName %>.name }}</h1>
   </ion-content>
