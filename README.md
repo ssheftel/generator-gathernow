@@ -2,4 +2,4 @@
 
 #Running
 
-- state  `yo gathernow:state 'localTwo' --tab='localOne' --parentState='localOne' --url='/:id'`
+- state  `yo gathernow:state 'eventDetails' --tabName='events' --parentState='events' --url='/:eventId'`

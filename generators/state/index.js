@@ -52,7 +52,7 @@ module.exports = yeoman.generators.Base.extend({
 
     this.fileName = this.stateName + 'State.coffee';
     this.jsFileName = this.stateName + 'State.js';
-    this.ctrlName = s(this.stateName).capitalize().value();
+    this.ctrlName = s(this.stateName).capitalize().value()+'Ctrl';
     this.ctrlInstsName = s(this.ctrlName).decapitalize().value();
     this.stateNamePrefix = this.parentStates.join('.');
     this.fullStateName = this.stateNamePrefix + '.' + this.stateName;
