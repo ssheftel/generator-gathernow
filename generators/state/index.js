@@ -1,21 +1,85 @@
 'use strict';
 var yeoman = require('yeoman-generator');
+var s = require("underscore.string");
+var utils = require('../utils');
+console.log(utils)
 
+/*
+
+yo gathernow:state 'stateName' 'tabName' 'parentState' 'url'
+
+*/
 module.exports = yeoman.generators.Base.extend({
   initializing: function () {
-    this.argument('name', {
+    this.argument('stateName', {
       required: true,
       type: String,
-      desc: 'The subgenerator name'
+      desc: 'The subgenerator stateName'
     });
+    this.argument('tabName', {
+      defaults: '',
+      type: String,
+      desc: 'The the tab the state is inserted in - will be name of ionic-tab-view name'
+    });
+    this.argument('parentState', {
+      defaults: '',
+      type: String,
+      desc: 'The the parent state can be dotted, dont include tab'
+    });
+    this.argument('url', {
+      defaults: '',
+      type: String,
+      desc: 'url'
+    });
+    this.parentStates = ['tab'];
+    if (this.parentState) {
+      this.parentStates.push(parentState)
+    }
+    if (!this.tabName) {
+      this.tabName = this.stateName
+    }
+    if (!this.url) {
+      this.url = '/' + stateName;
+    }
 
-    this.log('You called the Gathernow subgenerator with the argument ' + this.name + '.');
+    this.fileName = this.stateName + 'State.coffee';
+    this.jsFileName = this.stateName + 'State.js';
+    this.ctrlName = s(this.stateName).capitalize().value();
+    this.ctrlInstsName = s(this.ctrlName).decapitalize().value();
+    this.stateNamePrefix = this.parentStates.join('.');
+    this.fullStateName = this.stateNamePrefix + '.' + this.stateName;
+
+
+    this.log('You called the Gathernow subgenerator with the argument ' + this.stateName + '.');
+    this.log('You called the Gathernow subgenerator with the argument ' + this.tabName + '.');
   },
 
   writing: function () {
-    this.fs.copy(
-      this.templatePath('somefile.js'),
-      this.destinationPath('somefile.js')
+    var stateName, fileName, jsFileName, ctrlName, ctrlInstsName,stateNamePrefix, fullStateName, tabName, url, indexFilePath, insertBeforeLineFn, scriptPath,destPath;
+    indexFilePath = 'www_src/index.html';
+    insertBeforeLineFn = utils.insertBeforeLine.bind(this);
+    scriptPath = 'js/states/';
+    destPath = 'www_src/js/states/';
+
+    stateName = this.stateName
+    fileName = this.fileName
+    jsFileName = this.jsFileName
+    ctrlName = this.ctrlName
+    ctrlInstsName = this.ctrlInstsName
+    stateNamePrefix = this.stateNamePrefix
+    fullStateName = this.fullStateName
+    tabName = this.tabName
+    url = this.url
+
+
+    //State File
+    this.fs.copyTpl(
+      this.templatePath('_state.coffee'),
+      this.destinationPath(destPath + this.fileName),
+      {stateName:stateName, fileName:fileName, jsFileName:jsFileName, ctrlName:ctrlName, ctrlInstsName:ctrlInstsName, stateNamePrefix:stateNamePrefix, fullStateName:fullStateName, tabName:tabName, url:url}
     );
+    this.log(utils.makeScriptTag(scriptPath + this.jsFileName))
+    insertBeforeLineFn(indexFilePath, '  <!-- STATE_INSERT_POINT -->', utils.makeScriptTag(scriptPath + this.jsFileName));
+
   }
 });
